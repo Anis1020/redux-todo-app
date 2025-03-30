@@ -10,25 +10,38 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addTodo } from "@/redux/feature/todoSlice";
-import { useAppDispatch } from "@/redux/hooks";
 import { FormEvent, useState } from "react";
-import PrioritySelect from "../PrioritySelect/PrioritySelect";
+import { usePostTodoMutation } from "@/redux/api/api";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { SelectValue } from "@radix-ui/react-select";
 
 const TodoModal = () => {
   const [task, setTask] = useState();
   const [description, setDescription] = useState();
-  //   const [priority,setPriority]=useState()
-  const dispatch = useAppDispatch();
+  const [priority, setPriority] = useState();
+
+  console.log(priority);
+  const [addTodo, { isLoading, isError, isSuccess }] = usePostTodoMutation();
+  console.log(isLoading, isError, isSuccess);
+
   const handleDialog = (e: FormEvent) => {
     e.preventDefault();
-    const id = Math.random().toString(36).substring(2, 7);
+
     const taskDetails = {
-      id: id,
       title: task,
       description,
+      isCompleted: false,
+      priority,
     };
-    dispatch(addTodo(taskDetails));
+    // dispatch(addTodo());
+    addTodo(taskDetails);
   };
   return (
     <Dialog>
@@ -67,8 +80,29 @@ const TodoModal = () => {
               />
             </div>
           </div>
-          <PrioritySelect />
-          <div className="mt-3">
+          {/* priority */}
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="username" className="text-right">
+              priority
+            </Label>
+            <div className="col-span-3">
+              <Select onValueChange={(value) => setPriority(value)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a Priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Priority</SelectLabel>
+                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="average">Average</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          {/* <PrioritySelect /> */}
+          <div className="mt-3 flex justify-end">
             <DialogClose asChild>
               <Button type="submit">Save changes</Button>
             </DialogClose>

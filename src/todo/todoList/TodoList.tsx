@@ -1,30 +1,50 @@
 import { Button } from "@/components/ui/button";
-import { removeTodo, toggleStatus } from "@/redux/feature/todoSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useDeleteTodoMutation } from "@/redux/api/api";
+
 type TTodoListProps = {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   isCompleted?: boolean;
+  priority: string;
 };
-const TodoList = ({ title, description, id, isCompleted }: TTodoListProps) => {
-  const dispatch = useAppDispatch();
+const TodoList = ({
+  title,
+  description,
+  _id,
+  isCompleted,
+  priority,
+}: TTodoListProps) => {
+  const [deleteTodo, { isLoading }] = useDeleteTodoMutation();
+  const handleDeleteTodo = (id: string) => {
+    console.log("clicked", id);
+    deleteTodo(id);
+  };
 
   const handleToggle = () => {
-    dispatch(toggleStatus(id));
+    //todo
+    console.log("select clicked");
   };
   return (
     <div className="flex justify-around items-center border bg-white rounded-2xl">
-      <input onChange={handleToggle} type="checkbox" />
-      <div className="flex items-center">
-        <h1 className="bg-red-500"></h1>
-        <p>Priority</p>
+      <input onChange={handleToggle} type="checkbox" className="mx-2" />
+      <div className="flex items-center flex-1 gap-2">
+        <h1
+          className={`${
+            priority === "High"
+              ? "bg-red-500"
+              : priority === "Medium"
+              ? "bg-amber-300"
+              : "bg-pink-300"
+          }  w-2 h-2 rounded-full`}
+        ></h1>
+        <p>{priority}</p>
       </div>
-      <p>{isCompleted ? "Done" : "pending"}</p>
-      <p>{title}</p>
-      <p>{description}</p>
+      <p className="flex-1">{isCompleted ? "Done" : "pending"}</p>
+      <p className="flex-1">{title}</p>
+      <p className="flex-3">{description}</p>
       <div className="space-x-3 ">
-        <Button onClick={() => dispatch(removeTodo(id))}>Del</Button>
+        <Button onClick={() => handleDeleteTodo(_id)}>Del</Button>
         <Button>Edit</Button>
       </div>
     </div>

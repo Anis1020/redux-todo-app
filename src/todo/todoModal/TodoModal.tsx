@@ -25,11 +25,10 @@ import { SelectValue } from "@radix-ui/react-select";
 const TodoModal = () => {
   const [task, setTask] = useState();
   const [description, setDescription] = useState();
-  const [priority, setPriority] = useState();
-
-  console.log(priority);
+  const [priority, setPriority] = useState("");
+  // console.log(object);
   const [addTodo, { isLoading, isError, isSuccess }] = usePostTodoMutation();
-  console.log(isLoading, isError, isSuccess);
+  // console.log(isLoading, isError, isSuccess);
 
   const handleDialog = (e: FormEvent) => {
     e.preventDefault();

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useDeleteTodoMutation } from "@/redux/api/api";
+import { useDeleteTodoMutation, useUpdateTodoMutation } from "@/redux/api/api";
 
 type TTodoListProps = {
   _id: string;
@@ -16,18 +16,31 @@ const TodoList = ({
   priority,
 }: TTodoListProps) => {
   const [deleteTodo, { isLoading }] = useDeleteTodoMutation();
+
   const handleDeleteTodo = (id: string) => {
-    console.log("clicked", id);
     deleteTodo(id);
   };
-
+  const [updateTodo, { isSuccess }] = useUpdateTodoMutation();
   const handleToggle = () => {
     //todo
+    const options = {
+      _id,
+      data: {
+        title,
+        isCompleted: !isCompleted,
+      },
+    };
     console.log("select clicked");
+    updateTodo(options);
   };
   return (
     <div className="flex justify-around items-center border bg-white rounded-2xl">
-      <input onChange={handleToggle} type="checkbox" className="mx-2" />
+      <input
+        onChange={handleToggle}
+        defaultChecked={isCompleted}
+        type="checkbox"
+        className="mx-2"
+      />
       <div className="flex items-center flex-1 gap-2">
         <h1
           className={`${

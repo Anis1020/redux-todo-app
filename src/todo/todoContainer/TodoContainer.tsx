@@ -7,6 +7,7 @@ import { useState } from "react";
 const TodoContainer = () => {
   // const todos = useAppSelector((state) => state.todo);
   const [priority, setPriority] = useState();
+  // console.log(priority);
   const { data: todos, isLoading } = useGetPokemonByNameQuery(priority);
   // console.log(todos?.data);
   if (isLoading) {

@@ -34,6 +34,17 @@ export const baseApi = createApi({
       },
       invalidatesTags: ["todo"],
     }),
+    updateTodo: build.mutation({
+      query: (option) => {
+        console.log(option);
+        return {
+          url: `/todo/${option._id}`,
+          method: "PUT",
+          body: option.data,
+        };
+      },
+      invalidatesTags: ["todo"],
+    }),
   }),
 });
 
@@ -41,4 +52,5 @@ export const {
   useGetPokemonByNameQuery,
   usePostTodoMutation,
   useDeleteTodoMutation,
+  useUpdateTodoMutation,
 } = baseApi;
